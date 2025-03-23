@@ -9,7 +9,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -39,14 +42,24 @@ public class SecurityConfig {
         );
     }
 
+    @Bean
+    public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource) {
+        //(Spécifier le data source)dans quelle DB ou se trouve les utilisateurs et les roles
+        //dite a springSecurity quand un utilisteur va saisir son nom et le mot de passe, tu vas chercher l'utilisateur dans ce dataSource
+        // il doit créer deux table (stocker les utilisateurs et les roles)
+        return new JdbcUserDetailsManager(dataSource);
+    }
+
     // contient Bean : c-à-d c'est une méthode qui s'execute au démarage
     /** Configure l'authentification et l'autorisation des utilisateurs selon leurs rôles. */
-    @Bean
+    //@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         // Configure l'authentification par formulaire avec une page de connexion personnalisée accessible à tous.
         httpSecurity.formLogin(form -> form
                 .loginPage("/login")
+                // Redirige vers la page d'accueil après une connexion réussie
+                .defaultSuccessUrl("/")
                 .permitAll());
         httpSecurity.rememberMe(remember -> remember
                 .key("votreCleSecrete") // Clé secrète pour signer le cookie
