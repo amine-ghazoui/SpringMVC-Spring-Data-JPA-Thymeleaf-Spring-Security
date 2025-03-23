@@ -19,6 +19,20 @@ import javax.sql.DataSource;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+
+
+    @Bean
+    public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource) {
+        //(Spécifier le data source)dans quelle DB ou se trouve les utilisateurs et les roles
+        //dite a springSecurity quand un utilisteur va saisir son nom et le mot de passe, tu vas chercher l'utilisateur dans ce dataSource
+        // il doit créer deux table (stocker les utilisateurs et les roles)
+        return new JdbcUserDetailsManager(dataSource);
+    }
+
+
+
+
+
     /*
     Déclaration d'un objet PasswordEncoder pour chiffrer les mots de passe.
     Cet objet est utilisé pour encoder les mots de passe avant stockage et
@@ -31,7 +45,7 @@ public class SecurityConfig {
     }
 
     // définir les utilisateurs qui on le droit d'accéder a l'application (il faut définir ou est ce que spring security va chercher les utilisateur )
-    @Bean
+    //@Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager(PasswordEncoder passwordEncoder) {
         String encodedPassword = passwordEncoder.encode("1234");
         System.out.println(encodedPassword);
@@ -42,17 +56,10 @@ public class SecurityConfig {
         );
     }
 
-    @Bean
-    public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource) {
-        //(Spécifier le data source)dans quelle DB ou se trouve les utilisateurs et les roles
-        //dite a springSecurity quand un utilisteur va saisir son nom et le mot de passe, tu vas chercher l'utilisateur dans ce dataSource
-        // il doit créer deux table (stocker les utilisateurs et les roles)
-        return new JdbcUserDetailsManager(dataSource);
-    }
 
     // contient Bean : c-à-d c'est une méthode qui s'execute au démarage
     /** Configure l'authentification et l'autorisation des utilisateurs selon leurs rôles. */
-    //@Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         // Configure l'authentification par formulaire avec une page de connexion personnalisée accessible à tous.
@@ -68,7 +75,6 @@ public class SecurityConfig {
         // Autorise l'accès public aux ressources WebJars (CSS, JS, icônes, etc.)
         httpSecurity.authorizeHttpRequests(ar -> ar.requestMatchers("/webjars/**", "/h2-console/**").permitAll());
 
-
         /*
         on peux uriliser une autre solution, c'est d'utilisée les annotations
         (@EnableMethodSecurity) (et dans controller on ajoute @PreAuthorize()) (car si nous avons
@@ -76,9 +82,9 @@ public class SecurityConfig {
          */
         /*
         // Autorise uniquement les "ADMIN" à accéder à "/admin/**"
-        httpSecurity.authorizeHttpRequests(ar -> ar.requestMatchers("/admin/**").hasRole("ADMIN"));
+            httpSecurity.authorizeHttpRequests(ar -> ar.requestMatchers("/admin/**").hasRole("ADMIN"));
         // Autorise uniquement les "USER" à accéder à "/user/**"
-        httpSecurity.authorizeHttpRequests(ar -> ar.requestMatchers("/user/**").hasRole("USER"));
+            httpSecurity.authorizeHttpRequests(ar -> ar.requestMatchers("/user/**").hasRole("USER"));
         */
 
         // Toutes les autres requêtes nécessitent une authentification
@@ -92,6 +98,25 @@ public class SecurityConfig {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*
