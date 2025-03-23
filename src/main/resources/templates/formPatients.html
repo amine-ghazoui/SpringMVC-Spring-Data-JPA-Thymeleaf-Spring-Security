@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="template1">
+<head>
+    <meta charset="UTF-8">
+    <title>Form  Patients</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+</head>
+<body>
+    <div layout:fragment="content1">
+        <div class="col-md-6 offset-3">
+            <form method="post" th:action="@{save}">
+                <div>
+                    <label for="nom">Nom</label>
+                    <input id="nom" class="form-control" type="text" name="nom" th:value="${patient.nom}">
+                    <span class="text-danger" th:errors="${patient.nom}"></span>
+                </div>
+                <div>
+                    <label for="dateN">Date de Naissance</label>
+                    <input id="dateN" class="form-control" type="date" name="dateNaissance" th:value="${patient.dateNaissance}">
+                    <span class="text-danger" th:errors="${patient.dateNaissance}"></span>
+                </div>
+                <div>
+                    <label for="malade">Malade</label>
+                    <input id="malade" type="checkbox" name="malade" th:checked="${patient.malade}">
+                    <span class="text-danger" th:errors="${patient.malade}"></span>
+                </div>
+                <div>
+                    <label for="score">Score</label>
+                    <input id="score" class="form-control" type="text" name="score" th:value="${patient.score}">
+                    <span class="text-danger" th:errors="${patient.score}"></span>
+                </div>
+                <div class="form-check mb-3">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="remember">Malade
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+<!--
+th : est le préfixe utilisé par Thymeleaf pour indiquer des attributs spécifiques à ce moteur
+de templates. Par exemple, th:text définit le contenu textuel d'un élément, th:href génère
+dynamiquement des URLs, etc. Ce préfixe permet à Thymeleaf d'identifier et de traiter ces
+attributs lors du rendu de la vue.
+
+th:class  : dans Thymeleaf est utilisé pour définir dynamiquement la classe CSS d'un
+élément en fonction d'une condition ou d'une variable.
+
+th:each="page, status:${pages}" : Pour chaque élément du tableau pages, il itère et fournit
+l'index via status.index.
+-->
