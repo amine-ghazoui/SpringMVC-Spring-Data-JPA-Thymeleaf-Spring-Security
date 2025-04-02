@@ -32,7 +32,6 @@ public class SecurityConfig {
 
 
 
-
     /*
     Déclaration d'un objet PasswordEncoder pour chiffrer les mots de passe.
     Cet objet est utilisé pour encoder les mots de passe avant stockage et
