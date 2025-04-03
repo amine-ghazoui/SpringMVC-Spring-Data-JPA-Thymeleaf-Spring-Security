@@ -2,6 +2,7 @@ package org.example.patientsmvc;
 
 import org.example.patientsmvc.entities.Patient;
 import org.example.patientsmvc.repositories.PatientRepository;
+import org.example.patientsmvc.sec.service.AccountService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,7 +36,7 @@ public class PatientsMvcApplication {
         };
     }
 
-    @Bean
+    //@Bean
     CommandLineRunner commandLineRunner(JdbcUserDetailsManager jdbcUserDetailsManager) {
 
         PasswordEncoder passwordEncoder = passwordEncoder();
@@ -64,10 +65,28 @@ public class PatientsMvcApplication {
         };
     }
 
+
+    @Bean
+    CommandLineRunner commandLineRunner(AccountService accountService) {
+        return args -> {
+            accountService.addNewRole("USER");
+            accountService.addNewRole("ADMIN");
+            accountService.addNewUser("user1", "1234", "user1123@gmail.com", "1234");
+            accountService.addNewUser("user2", "1234", "user2123@gmail.com", "1234");
+            accountService.addNewUser("admin", "1234", "admin123@gmail.com", "1234");
+
+            accountService.addRoleToUser("user1", "USER");
+            accountService.addRoleToUser("user2", "USER");
+            accountService.addRoleToUser("admin", "ADMIN");
+            accountService.addRoleToUser("admin", "USER");
+        };
+    }
+
     // Cette méthode crée et retourne un bean de type PasswordEncoder utilisant l'algorithme BCrypt pour chiffrer les mots de passe.
     @Bean
     PasswordEncoder passwordEncoder(){
 
         return new BCryptPasswordEncoder();
     }
+
 }

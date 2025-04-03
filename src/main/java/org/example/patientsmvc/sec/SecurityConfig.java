@@ -21,7 +21,7 @@ public class SecurityConfig {
 
 
 
-    @Bean
+    //@Bean
     public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource) {
         //(Spécifier le data source)dans quelle DB ou se trouve les utilisateurs et les roles
         //dite a springSecurity quand un utilisteur va saisir son nom et le mot de passe, tu vas chercher l'utilisateur dans ce dataSource

@@ -18,6 +18,4 @@ public class AppRole {
 
     @Id
     private  String role;
-    @ManyToMany
-    private List<AppUser> appUser;
 }
