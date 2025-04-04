@@ -1,5 +1,8 @@
 package org.example.patientsmvc.sec;
 
+import lombok.AllArgsConstructor;
+import org.example.patientsmvc.sec.service.UserDetailServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -19,7 +22,10 @@ import javax.sql.DataSource;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserDetailServiceImpl userDetailsServiceImpl;
 
     //@Bean
     public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource) {
@@ -37,7 +43,7 @@ public class SecurityConfig {
     Cet objet est utilisé pour encoder les mots de passe avant stockage et
     pour vérifier la correspondance entre un mot de passe saisi et un mot de passe haché.
      */
-    private PasswordEncoder passwordEncoder;
+
 
     public SecurityConfig(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
@@ -92,6 +98,9 @@ public class SecurityConfig {
         httpSecurity.exceptionHandling(eh -> eh
                 .accessDeniedPage("/notAuthorized") // Redirige vers une page d'erreur 403
         );
+
+
+        httpSecurity.userDetailsService(userDetailsServiceImpl);
         // Construit la configuration de sécurité
         return httpSecurity.build();
     }

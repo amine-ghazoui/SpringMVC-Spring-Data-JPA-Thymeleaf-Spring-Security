@@ -66,7 +66,7 @@ public class PatientsMvcApplication {
     }
 
 
-    @Bean
+    //@Bean
     CommandLineRunner commandLineRunner(AccountService accountService) {
         return args -> {
             accountService.addNewRole("USER");
